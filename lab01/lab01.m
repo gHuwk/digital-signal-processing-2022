@@ -1,3 +1,5 @@
+
+
 % Исходные параметры
 sigma = 5;
 tt = 2;
@@ -24,16 +26,24 @@ rect_ref(abs(x) - tt < 0) = 1;
 
 % Восстановленные сигналы
 % sinc(x) = sin(x) / x
+function return_v = my_sinc(x, dt)
+    if t == 0
+        return_v = 1;
+    else
+        return_v = sin(x / dt * pi) / dt * pi;
+end
+
 % F = 1 / 2 dx
 gauss_restored = zeros(1, length(x));
 rect_restored = zeros(1, length(x));
 for i=1:length(x)
    for j = 1:n
        % Через формулу Котельникова
-       gauss_restored(i) = gauss_restored(i) + gauss_discrete(j) * sin((x(i)-t(j))/dt * pi) / ((x(i)-t(j))/dt * pi);
-       rect_restored(i) = rect_restored(i) + rect_discrete(j) * sin((x(i)-t(j))/dt * pi) / ((x(i)-t(j))/dt * pi);
+       gauss_restored(i) = gauss_restored(i) + gauss_discrete(j) * my_sinc(x(i) - t(j), dt);
+       rect_restored(i) = rect_restored(i) + rect_discrete(j) * my_sinc(x(i) - t(j), dt);
    end
 end
+
 
 figure;
 
